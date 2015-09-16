@@ -3,7 +3,7 @@
 Changelog
 =========
 
-0.2 (unreleased)
+0.2 (2015-09-16)
 ----------------
 - 0.1 was a brown bag release.
   [gforcada]
