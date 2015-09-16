@@ -7,6 +7,7 @@ OLD_RE = re.compile(r'^(?:[^\'"]*[\'"][^\'"]*[\'"])*\s*%|^\s*%')
 
 class Flake8Pep3101(object):
     """
+    @do3cc:
     Checking for old style formatting is hard in the real world.
     The logging module does not support PEP3101 yet, but then again,
     you are not supposed to give the formatted string but the
@@ -37,5 +38,10 @@ class Flake8Pep3101(object):
                 found = OLD_RE.search(line)
                 if found:
                     position = line.find('%')
-                    msg = self.message.format(line[position:position + 2])
+                    formatter = line[position:position + 2]
+                    if formatter[1] in ('p', 's', 'i', 'r'):
+                        msg = self.message.format(formatter)
+                    else:
+                        msg = self.message.format('%')
+
                     yield lineno, position, msg, type(self)

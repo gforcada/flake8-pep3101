@@ -17,106 +17,123 @@ class TestFlake8PloneAPI(unittest.TestCase):
         return file_path
 
     def test_no_old_formatter(self):
-        file_path = self._given_a_file_in_test_dir('b = 3\n')
+        file_path = self._given_a_file_in_test_dir(
+            'b = 3\n'
+        )
         checker = Flake8Pep3101(None, file_path)
         ret = list(checker.run())
         self.assertEqual(len(ret), 0)
 
     def test_new_formatting_no_problem(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
             'print("hello {0:s}".format("world")',
         ]))
         checker = Flake8Pep3101(None, file_path)
         ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
 
     def test_s_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
             'b = 3',
-            'a = "something %s" % b',
+            'print("hello %s" % ("world")\n',
             'import os3',
         ]))
         checker = Flake8Pep3101(None, file_path)
         ret = list(checker.run())
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0][0], 2)
-        self.assertEqual(ret[0][1], 15)
+        self.assertEqual(ret[0][1], 13)
         self.assertEqual(ret[0][2], 'S001 found %s formatter')
 
-
-
-
-    def test_analysis_should_return_false_for_invalid__s(self):
+    def test_i_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
-            'print("hello %s" % ("world")',
+            'print("hello %i" % ("world")',
         ]))
         checker = Flake8Pep3101(None, file_path)
         ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 1)
+        self.assertEqual(ret[0][1], 13)
+        self.assertEqual(ret[0][2], 'S001 found %i formatter')
 
-    def test_analysis_should_return_false_for_invalid__i(self):
+    def test_p_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
-            'print("hello %i" % ("world")',  # noqa
+            'print("hello %p" % ("world")',
         ]))
         checker = Flake8Pep3101(None, file_path)
         ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 1)
+        self.assertEqual(ret[0][1], 13)
+        self.assertEqual(ret[0][2], 'S001 found %p formatter')
 
-    def test_analysis_should_return_false_for_invalid__p(self):
+    def test_r_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
-            'print("hello %p" % ("world")',  # noqa
+            'print("hello %r" % (self)',
         ]))
         checker = Flake8Pep3101(None, file_path)
         ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 1)
+        self.assertEqual(ret[0][1], 13)
+        self.assertEqual(ret[0][2], 'S001 found %r formatter')
 
-    def test_analysis_should_return_false_for_invalid__r(self):
+    def test_multiline_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
-            'print("hello %r" % (self)',  # noqa
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-
-    def test_analysis_should_return_false_for_multiline_invalid(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
             'print("hello %s"',
             '% (self)',
         ]))
-        with OutputCapture():
-            self.assertFalse(PEP3101(self.options).run())
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 2)
+        self.assertEqual(ret[0][1], 0)
+        self.assertEqual(ret[0][2], 'S001 found % formatter')
 
-    def test_analysis_its_complicated(self):
+    def test_multiline_aligned_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
-            'log("%s is bad", "me")'
+            'print("hello %s"',
+            '      % (self)',
         ]))
-        with OutputCapture():
-            self.assertTrue(PEP3101(self.options).run())
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 2)
+        self.assertEqual(ret[0][1], 6)
+        self.assertEqual(ret[0][2], 'S001 found % formatter')
 
-    def test_analysis_its_complicated2(self):
+    def test_logging_module(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
+            'import logging',
+            'logger = logging.getLogger()',
+            'logger.info("%s is bad", "me")'
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
+
+    def test_multiple_strings(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
             '"""""""1" if "%" else "2"'
         ]))
-        with OutputCapture():
-            self.assertTrue(PEP3101(self.options).run())
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
 
+    def test_multiple_strings_with_old_formatting(self):
+        """Check that multiple quoting is handled properly.
+
+        In this case correctly detecting it.
+        """
         file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
             '"""""""1" if "%" else "2%s" % "x"'
         ]))
-        with OutputCapture():
-            self.assertFalse(PEP3101(self.options).run())
-
-    def test_analysis_should_return_true_for_logs(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            '# -*- coding: utf-8 -*-',
-            'console.log("hello %s", "world")',  # noqa
-        ]))
-        with OutputCapture():
-            self.assertTrue(PEP3101(self.options).run())
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 1)
+        self.assertEqual(ret[0][1], 14)
+        self.assertEqual(ret[0][2], 'S001 found % formatter')
 
 
 if __name__ == '__main__':
