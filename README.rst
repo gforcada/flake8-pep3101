@@ -34,7 +34,7 @@ Requirements
 Extras
 ------
 If you want to check whether your new style formatting are correctly defined,
-check flake8-string-format plugin.
+check `flake8-string-format`_ plugin.
 
 License
 -------
