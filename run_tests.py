@@ -6,7 +6,7 @@ import os
 import unittest
 
 
-class TestFlake8PloneAPI(unittest.TestCase):
+class TestFlake8Pep3101(unittest.TestCase):
 
     def _given_a_file_in_test_dir(self, contents):
         test_dir = os.path.realpath(mkdtemp())
