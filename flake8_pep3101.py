@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
+import pep8
 
 OLD_RE = re.compile(r'^(?:[^\'"]*[\'"][^\'"]*[\'"])*\s*%|^\s*%')
 
@@ -33,15 +34,20 @@ class Flake8Pep3101(object):
         self.filename = filename
 
     def run(self):
-        with open(self.filename) as f:
-            for lineno, line in enumerate(f, start=1):
-                found = OLD_RE.search(line)
-                if found:
-                    position = line.find('%')
-                    formatter = line[position:position + 2]
-                    if formatter[1] in ('p', 's', 'i', 'r'):
-                        msg = self.message.format(formatter)
-                    else:
-                        msg = self.message.format('%')
+        if self.filename is 'stdin':
+            f = pep8.stdin_get_value().splitlines()
+        else:
+            with open(self.filename) as fi:
+                f = fi.read().splitlines()
 
-                    yield lineno, position, msg, type(self)
+        for lineno, line in enumerate(f, start=1):
+            found = OLD_RE.search(line)
+            if found:
+                position = line.find('%')
+                formatter = line[position:position + 2]
+                if formatter[1] in ('p', 's', 'i', 'r'):
+                    msg = self.message.format(formatter)
+                else:
+                    msg = self.message.format('%')
+
+                yield lineno, position, msg, type(self)
