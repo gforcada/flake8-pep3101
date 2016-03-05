@@ -5,9 +5,8 @@ Changelog
 
 0.3 (unreleased)
 ----------------
-
-- Nothing changed yet.
-
+- Allow stdin processing, this way text editor can pass input to flake8.
+  [mjacksonw]
 
 0.2 (2015-09-16)
 ----------------
