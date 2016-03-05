@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import pep8
 import re
 
-import pep8
 
 OLD_RE = re.compile(r'^(?:[^\'"]*[\'"][^\'"]*[\'"])*\s*%|^\s*%')
 
