@@ -30,7 +30,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Topic :: Software Development',
     ],
-    keywords='pep8 flake8 string formatting',
+    keywords='pep8 pycodestyle flake8 string formatting',
     author='Gil Forcada',
     author_email='gil.gnome@gmail.com',
     url='https://github.com/gforcada/flake8-pep3101',
