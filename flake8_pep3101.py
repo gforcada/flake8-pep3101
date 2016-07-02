@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-import pep8
 import re
 
+try:
+    import pycodestyle
+except ImportError:
+    import pep8 as pycodestyle
 
 OLD_RE = re.compile(r'^(?:[^\'"]*[\'"][^\'"]*[\'"])*\s*%|^\s*%')
 
@@ -35,7 +38,7 @@ class Flake8Pep3101(object):
 
     def run(self):
         if self.filename is 'stdin':
-            f = pep8.stdin_get_value().splitlines()
+            f = pycodestyle.stdin_get_value().splitlines()
         else:
             with open(self.filename) as fi:
                 f = fi.read().splitlines()
