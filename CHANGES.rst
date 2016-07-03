@@ -5,9 +5,20 @@ Changelog
 
 0.4 (unreleased)
 ----------------
+- Rename pep8 to pycodestyle.
+  [alefteris]
 
-- Nothing changed yet.
+- Add support for python 3.5.
+  [alefteris]
 
+- Add flake8 pypi classifier.
+  [alefteris]
+
+- Drop python 3.3 and 3.4 support (only testing it probably works just fine).
+  [gforcada]
+
+- Fix travis and coveralls to work properly with python 3.5.
+  [gforcada]
 
 0.3 (2016-03-05)
 ----------------
@@ -26,4 +37,3 @@ Changelog
 
 - Create the flake8 plugin per se.
   [gforcada]
-
