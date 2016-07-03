@@ -3,6 +3,12 @@
 Changelog
 =========
 
+0.5 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.4 (2016-07-03)
 ----------------
 - Rename pep8 to pycodestyle.
