@@ -1,14 +1,10 @@
+sudo: false
 language: python
-python: 2.7
-env:
-  matrix:
-    - TOXENV=py27
-    - TOXENV=py33
-    - TOXENV=py34
-    - TOXENV=py35
-    - TOXENV=coverage
+python:
+  - "2.7"
+  - "3.5"
 cache:
   directories:
     - $HOME/.cache/pip
-install: pip install docutils tox
+install: pip install docutils tox-travis
 script: tox

@@ -28,7 +28,7 @@ Install with pip::
 
 Requirements
 ------------
-- Python 2.7, 3.3, 3.4, 3.5
+- Python 2.7, 3.5
 - flake8
 
 Extras
