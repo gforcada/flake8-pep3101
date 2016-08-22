@@ -8,6 +8,25 @@ except ImportError:
 
 OLD_RE = re.compile(r'^(?:[^\'"]*[\'"][^\'"]*[\'"])*\s*%|^\s*%')
 
+FORMATTERS = (
+    's',
+    'i',
+    'p',
+    'r',
+    'c',
+    'd',
+    'e',
+    'E',
+    'f',
+    'F',
+    'g',
+    'G',
+    'o',
+    'u',
+    'x',
+    'X',
+)
+
 
 class Flake8Pep3101(object):
     """
@@ -48,7 +67,7 @@ class Flake8Pep3101(object):
             if found:
                 position = line.find('%')
                 formatter = line[position:position + 2]
-                if formatter[1] in ('p', 's', 'i', 'r'):
+                if formatter[1] in FORMATTERS:
                     msg = self.message.format(formatter)
                 else:
                     msg = self.message.format('%')
