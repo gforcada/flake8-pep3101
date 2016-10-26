@@ -45,6 +45,6 @@ setup(
         'flake8',
     ],
     entry_points={
-        'flake8.extension': ['P00 = flake8_pep3101:Flake8Pep3101'],
+        'flake8.extension': ['S001 = flake8_pep3101:Flake8Pep3101'],
     },
 )
