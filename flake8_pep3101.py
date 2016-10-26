@@ -67,7 +67,9 @@ class Flake8Pep3101(object):
             if found:
                 position = line.find('%')
                 formatter = line[position:position + 2]
-                if formatter[1] in FORMATTERS:
+                if len(formatter) == 1:
+                    msg = self.message.format('%')
+                elif formatter[1] in FORMATTERS:
                     msg = self.message.format(formatter)
                 else:
                     msg = self.message.format('%')
