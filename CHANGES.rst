@@ -6,8 +6,14 @@ Changelog
 0.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add all possible string formatters.
+  [gforcada]
 
+- Fix extension to work with flake8 > 3.0.
+  [gforcada]
+
+- Fix crash when the % symbol was the last character of a line.
+  [gforcada]
 
 0.4 (2016-07-03)
 ----------------
