@@ -3,7 +3,7 @@
 Changelog
 =========
 
-0.5 (unreleased)
+0.5 (2016-10-26)
 ----------------
 
 - Add all possible string formatters.
