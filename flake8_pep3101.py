@@ -49,7 +49,7 @@ class Flake8Pep3101(object):
     """
 
     name = 'flake8_pep3101'
-    version = '0.1'
+    version = '0.5'
     message = 'S001 found {0:s} formatter'
 
     def __init__(self, tree, filename):
