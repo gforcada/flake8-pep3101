@@ -252,6 +252,14 @@ class TestFlake8Pep3101(unittest.TestCase):
         ret = list(checker.run())
         self.assertEqual(len(ret), 0)
 
+    def test_multiple_single_quotes_strings(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            "'''''''1' if '%' else '2'"
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
+
     def test_multiple_strings_with_old_formatting(self):
         """Check that multiple quoting is handled properly.
 
@@ -266,6 +274,20 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(ret[0][0], 1)
         self.assertEqual(ret[0][1], 14)
         self.assertEqual(ret[0][2], 'S001 found % formatter')
+
+    def test_percent_on_string(self):
+        """Check that multiple quoting is handled properly.
+
+        In this case no string substitution is happening.
+
+        Found in plone.app.drafts.tests
+        """
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            'a = \'"%2B%2Badd%2B%2BMyDocument"\''
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
 
 
 if __name__ == '__main__':

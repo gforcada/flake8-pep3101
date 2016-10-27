@@ -6,7 +6,19 @@ try:
 except ImportError:
     import pep8 as pycodestyle
 
-OLD_RE = re.compile(r'^(?:[^\'"]*[\'"][^\'"]*[\'"])*\s*%|^\s*%')
+
+OLD_RE = re.compile(
+    r'^'  # beginning of a string
+    r'('  # group
+    r'[^\'"]*'  # any character(s) that is/are no single/double quote
+    r'(\'[^\']*\')*'  # any single quoted string
+    r'("[^"]*")'  # any double quotted string
+    r')*'  # end of group, either none or multiple repetitions
+    r'\s*'  # any space
+    r'%'  # percent character
+    r'|'  # either everything up to now or what comes next
+    r'^\s*%'  # beginning of a string, spaces and a percent character
+)
 
 FORMATTERS = (
     's',
@@ -37,7 +49,8 @@ class Flake8Pep3101(object):
     format string and the parameters to be inserted.
     I never found a reference for that but now sentry relies on it.
     So this check, looks for:
-    1. two string delimiter characters following any number of whitespace and %
+    1. two string delimiter characters following any number of whitespace, a %
+       an and extra space
     2. Beginning of line, any number of whitespace and %
 
     This will ignore log messages that do not do inline message formatting,
