@@ -6,8 +6,10 @@ Changelog
 0.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Handle edge case when a single or double quoted string
+  has another pair of quotes inside ('lala "lu" la') with
+  some % symbol inside as well.
+  [gforcada]
 
 0.5 (2016-10-26)
 ----------------
