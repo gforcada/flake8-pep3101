@@ -3,7 +3,7 @@
 Changelog
 =========
 
-0.6 (unreleased)
+0.6 (2016-10-29)
 ----------------
 
 - Handle edge case when a single or double quoted string
