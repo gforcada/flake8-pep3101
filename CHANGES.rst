@@ -5,13 +5,23 @@ Changelog
 
 1.0 (unreleased)
 ----------------
+- Remove tox and use plain travis matrix to test.
+  [gforcada]
 
-- Nothing changed yet.
+- Test on python 2.7, python 3.5, pypy and pypy3.
+  [gforcada]
 
+- Require flake8 3.0.
+  [gforcada]
+
+- Use ast to analyze the code.
+  The regular expression used so far was mostly a hit or miss,
+  with each corner case making it even more difficult to read.
+  The new checker with ast is simple, elegant and so much easy to read.
+  [gforcada]
 
 0.6 (2016-10-29)
 ----------------
-
 - Handle edge case when a single or double quoted string
   has another pair of quotes inside ('lala "lu" la') with
   some % symbol inside as well.
@@ -19,7 +29,6 @@ Changelog
 
 0.5 (2016-10-26)
 ----------------
-
 - Add all possible string formatters.
   [gforcada]
 
