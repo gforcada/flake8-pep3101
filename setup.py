@@ -39,7 +39,7 @@ setup(
     test_suite='run_tests',
     zip_safe=False,
     install_requires=[
-        'flake8',
+        'flake8 >= 3.0',
     ],
     extras_require={
         'test': [
