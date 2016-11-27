@@ -44,6 +44,11 @@ setup(
     install_requires=[
         'flake8',
     ],
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'flake8.extension': ['S001 = flake8_pep3101:Flake8Pep3101'],
     },
