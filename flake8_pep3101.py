@@ -15,7 +15,7 @@ class Flake8Pep3101(object):
 
     def run(self):
         if self.filename is 'stdin':
-            lines = pycodestyle.stdin_get_value().splitlines()
+            lines = pycodestyle.stdin_get_value()
             tree = ast.parse(lines)
         elif self.tree:
             tree = self.tree
