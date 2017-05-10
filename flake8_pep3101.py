@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import ast
-import pycodestyle
 
 
 class Flake8Pep3101(object):
 
     name = 'flake8_pep3101'
-    version = '1.0'
+    version = '1.1'
     message = 'S001 found module formatter'
 
     def __init__(self, tree, filename):
@@ -15,9 +14,6 @@ class Flake8Pep3101(object):
 
     def run(self):
         if self.filename is 'stdin':
-            lines = pycodestyle.stdin_get_value()
-            tree = ast.parse(lines)
-        elif self.tree:
             tree = self.tree
         else:
             with open(self.filename) as f:
