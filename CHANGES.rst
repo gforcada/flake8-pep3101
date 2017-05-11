@@ -3,7 +3,7 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2017-05-12)
 ----------------
 
 - Handle variable formatting (i.e. ``my_string_variable % ('one', 'two', )``).
