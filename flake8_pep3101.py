@@ -6,7 +6,7 @@ import pycodestyle
 class Flake8Pep3101(object):
 
     name = 'flake8_pep3101'
-    version = '1.0'
+    version = '1.1'
     message = 'S001 found module formatter'
 
     def __init__(self, tree, filename):
