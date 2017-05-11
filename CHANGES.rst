@@ -6,8 +6,8 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Handle variable formatting (i.e. ``my_string_variable % ('one', 'two', )``).
+  [gforcada]
 
 1.0 (2016-11-27)
 ----------------
