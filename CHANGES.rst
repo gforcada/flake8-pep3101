@@ -9,6 +9,12 @@ Changelog
 - Handle variable formatting (i.e. ``my_string_variable % ('one', 'two', )``).
   [gforcada]
 
+- Test againsta Python 3.6.
+  [gforcada]
+
+- Release universal wheels as well.
+  [gforcada]
+
 1.0 (2016-11-27)
 ----------------
 - Remove tox and use plain travis matrix to test.
