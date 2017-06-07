@@ -153,6 +153,18 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(ret[0][1], 4)
         self.assertEqual(ret[0][2], 'S001 found module formatter')
 
+    def test_variable(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            "a = 'my string %s %s'",
+            "a % ('3', '4', )",
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0][0], 2)
+        self.assertEqual(ret[0][1], 0)
+        self.assertEqual(ret[0][2], 'S001 found module formatter')
+
 
 if __name__ == '__main__':
     unittest.main()

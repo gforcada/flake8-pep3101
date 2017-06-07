@@ -11,7 +11,7 @@ long_description = '{0}\n{1}'.format(
 
 setup(
     name='flake8-pep3101',
-    version='1.1.dev0',
+    version='1.2.dev0',
     description=short_description,
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -25,6 +25,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Quality Assurance',
