@@ -165,6 +165,16 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(ret[0][1], 0)
         self.assertEqual(ret[0][2], 'S001 found module formatter')
 
+    def test_number_modulo(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            'var = 40',
+            'if var % 50 == 0:',
+            '    print(var)',
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
