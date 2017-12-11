@@ -165,10 +165,20 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(ret[0][1], 0)
         self.assertEqual(ret[0][2], 'S001 found module formatter')
 
-    def test_number_modulo(self):
+    def test_right_hand_number_modulo(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
             'var = 40',
             'if var % 50 == 0:',
+            '    print(var)',
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 0)
+
+    def test_left_hand_number_modulo(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            'var = 40',
+            'if 50 % var == 0:',
             '    print(var)',
         ]))
         checker = Flake8Pep3101(None, file_path)

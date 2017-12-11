@@ -25,6 +25,15 @@ class Flake8Pep3101(object):
 
         for stmt in ast.walk(tree):
             if isinstance(stmt, ast.BinOp) and \
-                    isinstance(stmt.op, ast.Mod) and \
-                    isinstance(stmt.left, (ast.Str, ast.Name)):
-                yield stmt.lineno, stmt.col_offset, self.message, type(self)
+                    isinstance(stmt.op, ast.Mod):
+                if isinstance(stmt.left, ast.Num) or \
+                        isinstance(stmt.right, ast.Num):
+                    continue
+
+                if isinstance(stmt.left, (ast.Str, ast.Name)):
+                    yield (
+                        stmt.lineno,
+                        stmt.col_offset,
+                        self.message,
+                        type(self),
+                    )
