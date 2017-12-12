@@ -6,8 +6,8 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Handle when there are numbers in either side of the modulo operator.
+  [gforcada]
 
 1.1 (2017-05-12)
 ----------------
