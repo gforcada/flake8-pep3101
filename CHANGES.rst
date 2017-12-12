@@ -3,7 +3,7 @@
 Changelog
 =========
 
-1.2 (unreleased)
+1.2 (2017-12-12)
 ----------------
 
 - Handle when there are numbers in either side of the modulo operator.
