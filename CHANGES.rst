@@ -3,11 +3,11 @@
 Changelog
 =========
 
-1.3 (unreleased)
-----------------
+1.2.1 (unreleased)
+------------------
 
-- Nothing changed yet.
-
+- Fix text on the error message.
+  [icemac]
 
 1.2 (2017-12-12)
 ----------------
