@@ -54,7 +54,7 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0][0], 1)
         self.assertEqual(ret[0][1], 6)
-        self.assertEqual(ret[0][2], 'S001 found module formatter')
+        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
 
     def test_multiline_formatter(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
@@ -66,7 +66,7 @@ class TestFlake8Pep3101(unittest.TestCase):
             app.run([file_path, ])
 
         self.assertIn(
-            '1:7: S001 found module formatter',
+            '1:7: S001 found modulo formatter',
             output.captured
         )
 
@@ -80,7 +80,7 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0][0], 1)
         self.assertEqual(ret[0][1], 6)
-        self.assertEqual(ret[0][2], 'S001 found module formatter')
+        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
 
     def test_logging_module(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
@@ -121,7 +121,7 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0][0], 1)
         self.assertEqual(ret[0][1], 22)
-        self.assertEqual(ret[0][2], 'S001 found module formatter')
+        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
 
     def test_percent_on_string(self):
         """Check that multiple quoting is handled properly.
@@ -151,7 +151,7 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0][0], 1)
         self.assertEqual(ret[0][1], 4)
-        self.assertEqual(ret[0][2], 'S001 found module formatter')
+        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
 
     def test_variable(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
@@ -163,7 +163,7 @@ class TestFlake8Pep3101(unittest.TestCase):
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0][0], 2)
         self.assertEqual(ret[0][1], 0)
-        self.assertEqual(ret[0][2], 'S001 found module formatter')
+        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
 
     def test_right_hand_number_modulo(self):
         file_path = self._given_a_file_in_test_dir('\n'.join([
