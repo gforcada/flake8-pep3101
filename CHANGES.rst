@@ -3,7 +3,7 @@
 Changelog
 =========
 
-1.2.1 (unreleased)
+1.2.1 (2018-04-05)
 ------------------
 
 - Fix text on the error message.
