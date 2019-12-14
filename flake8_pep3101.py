@@ -24,10 +24,10 @@ class Flake8Pep3101(object):
                 tree = ast.parse(f.read())
 
         for stmt in ast.walk(tree):
-            if isinstance(stmt, ast.BinOp) and \
-                    isinstance(stmt.op, ast.Mod):
-                if isinstance(stmt.left, ast.Num) or \
-                        isinstance(stmt.right, ast.Num):
+            if self._is_module_operation(stmt):
+                if self._is_left_hand_number(stmt):
+                    continue
+                if self._is_modulo_variable_and_number(stmt):
                     continue
 
                 if isinstance(stmt.left, (ast.Str, ast.Name)):
@@ -37,3 +37,18 @@ class Flake8Pep3101(object):
                         self.message,
                         type(self),
                     )
+
+    @staticmethod
+    def _is_module_operation(stmt):
+        return isinstance(stmt, ast.BinOp) and isinstance(stmt.op, ast.Mod)
+
+    @staticmethod
+    def _is_left_hand_number(stmt):
+        """Check if it is a case of `44 % SOMETHING`."""
+        return isinstance(stmt.left, ast.Num)
+
+    @staticmethod
+    def _is_modulo_variable_and_number(stmt):
+        """Check if it is a case of `var % 44`."""
+        return isinstance(stmt.right, ast.Num) and \
+            isinstance(stmt.left, ast.Name)

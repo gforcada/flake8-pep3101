@@ -185,6 +185,19 @@ class TestFlake8Pep3101(unittest.TestCase):
         ret = list(checker.run())
         self.assertEqual(len(ret), 0)
 
+    def test_right_hand_string_left_hand_number(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            'print("asd %s" % 1)',
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_right_hand_string_left_hand_variable(self):
+        file_path = self._given_a_file_in_test_dir('\n'.join([
+            'a = 44',
+            'print("asd %s" % a)',
+        ]))
+        checker = Flake8Pep3101(None, file_path)
+        ret = list(checker.run())
+        self.assertEqual(len(ret), 1)
