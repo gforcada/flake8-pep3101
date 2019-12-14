@@ -1,0 +1,7 @@
+flake8
+pip-tools
+pycodestyle
+pytest < 5.0  # as soon as we drop python 2.7 we can bump this
+more-itertools < 5.0  # as soon as we drop python 2.7 we can bump this
+pytest-cov
+testfixtures

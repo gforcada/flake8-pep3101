@@ -1,19 +1,20 @@
 language: python
 python:
   - '2.7'
-  - '3.5'
   - '3.6'
+  - '3.7'
   - 'pypy'
   - 'pypy3'
 cache:
   directories:
     - $HOME/.cache/pip
 install:
-  - pip install -e .[test]
+  - pip install pip-tools
+  - pip-sync requirements.txt
 script:
   - flake8 *.py
-  - python run_tests.py
+  - pytest run_tests.py
 after_success:
-  - pip install -q coverage==3.7.1 coveralls pytest-cov
+  - pip install -q coveralls
   - py.test run_tests.py --cov flake8_pep3101 --cov-report term-missing
   - coveralls
