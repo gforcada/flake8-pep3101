@@ -6,7 +6,9 @@ Changelog
 1.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Warn about `"string %i" % 33` which was previously ignored.
+  Reported by @unformatt.
+  [gforcada]
 
 
 1.2.1 (2018-04-05)
