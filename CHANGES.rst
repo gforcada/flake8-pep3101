@@ -3,7 +3,7 @@
 Changelog
 =========
 
-1.2.2 (unreleased)
+1.3.0 (2019-12-15)
 ------------------
 
 - Warn about `"string %i" % 33` which was previously ignored.
