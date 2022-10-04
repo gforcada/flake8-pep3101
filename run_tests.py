@@ -62,7 +62,7 @@ class TestFlake8Pep3101(unittest.TestCase):
             '% (\'world\'))',
         ]))
         app = application.Application()
-        with OutputCapture() as output:
+        with OutputCapture(fd=True) as output:
             app.run([file_path, ])
 
         self.assertIn(
