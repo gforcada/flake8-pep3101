@@ -45,20 +45,11 @@ setup(
     author_email='gil.gnome@gmail.com',
     url='https://github.com/gforcada/flake8-pep3101',
     license='GPL version 2',
-    py_modules=['flake8_pep3101', ],
+    py_modules=['flake8_pep3101'],
     include_package_data=True,
     test_suite='run_tests',
     zip_safe=False,
-    install_requires=[
-        'flake8',
-    ],
-    extras_require={
-        'test': [
-            'pytest',
-            'testfixtures',
-        ],
-    },
-    entry_points={
-        'flake8.extension': ['S001 = flake8_pep3101:Flake8Pep3101'],
-    },
+    install_requires=['flake8'],
+    extras_require={'test': ['pytest']},
+    entry_points={'flake8.extension': ['S001 = flake8_pep3101:Flake8Pep3101']},
 )

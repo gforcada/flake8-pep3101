@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 import ast
+
 import pycodestyle
 
 
-class Flake8Pep3101(object):
+class Flake8Pep3101:
 
     name = 'flake8_pep3101'
     version = '1.2.1'
@@ -50,5 +50,4 @@ class Flake8Pep3101(object):
     @staticmethod
     def _is_modulo_variable_and_number(stmt):
         """Check if it is a case of `var % 44`."""
-        return isinstance(stmt.right, ast.Num) and \
-            isinstance(stmt.left, ast.Name)
+        return isinstance(stmt.right, ast.Num) and isinstance(stmt.left, ast.Name)
