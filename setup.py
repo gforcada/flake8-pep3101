@@ -40,6 +40,7 @@ setup(
         'Topic :: Software Development',
         'Topic :: Software Development :: Quality Assurance',
     ],
+    python_requires='>=3.7',
     keywords='pep8 pycodestyle flake8 python string formatting',
     author='Gil Forcada',
     author_email='gil.gnome@gmail.com',
