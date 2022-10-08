@@ -1,10 +1,9 @@
 import ast
 
-import pycodestyle
+from flake8 import utils as stdin_utils
 
 
 class Flake8Pep3101:
-
     name = 'flake8_pep3101'
     version = '1.2.1'
     message = 'S001 found modulo formatter'
@@ -14,14 +13,11 @@ class Flake8Pep3101:
         self.tree = tree
 
     def run(self):
+        tree = self.tree
+
         if self.filename == 'stdin':
-            lines = pycodestyle.stdin_get_value()
+            lines = stdin_utils.stdin_get_value()
             tree = ast.parse(lines)
-        elif self.tree:
-            tree = self.tree
-        else:
-            with open(self.filename) as f:
-                tree = ast.parse(f.read())
 
         for stmt in ast.walk(tree):
             if self._is_module_operation(stmt):
