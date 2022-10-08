@@ -6,8 +6,15 @@ Changelog
 1.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update dependencies. [gforcada]
 
+- Test the code on GitHub actions. [gforcada]
+
+- Drop python 2.7 and only support python 3.7+. [gforcada]
+
+- Use linters and formatters to keep code sane and beautiful. [gforcada]
+
+- Simplify the amount of code to write a test. [gforcada]
 
 1.3.0 (2019-12-15)
 ------------------

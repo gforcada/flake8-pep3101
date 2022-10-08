@@ -1,127 +1,123 @@
-# -*- coding: utf-8 -*-
-from flake8_pep3101 import Flake8Pep3101
-from flake8.main import application
-from tempfile import mkdtemp
-from testfixtures import OutputCapture
-
-import os
+import ast
+import textwrap
 import unittest
+from unittest import mock
+
+from flake8_pep3101 import Flake8Pep3101
 
 
-class TestFlake8Pep3101(unittest.TestCase):
+class NewTestFlake8Pep3101(unittest.TestCase):
+    def check_code(self, source, expected_codes=None):
+        """Check if the given source code generates the given flake8 errors
 
-    @staticmethod
-    def _given_a_file_in_test_dir(contents):
-        test_dir = os.path.realpath(mkdtemp())
-        file_path = os.path.join(test_dir, 'test.py')
-        with open(file_path, 'w') as a_file:
-            a_file.write(contents)
+        If `expected_codes` is a string is converted to a list,
+        if it is not given, then it is expected to **not** generate any error.
+        """
+        if isinstance(expected_codes, str):
+            expected_codes = [expected_codes]
+        elif expected_codes is None:
+            expected_codes = []
+        tree = ast.parse(textwrap.dedent(source))
+        checker = Flake8Pep3101(tree, '/home/script.py')
+        return_statements = list(checker.run())
 
-        return file_path
+        self.assertEqual(
+            len(return_statements), len(expected_codes), f'Got {return_statements}'
+        )
+
+        for item, code in zip(return_statements, expected_codes):
+            self.assertTrue(
+                item[2].startswith(f'{code} '),
+                f'Actually got {item[2]} rather than {code}',
+            )
+
+    @mock.patch('flake8.utils.stdin_get_value')
+    def test_stdin(self, stdin_get_value):
+        source = 'a = "hello %s" % ("world")'
+        stdin_get_value.return_value = source
+        checker = Flake8Pep3101('', 'stdin')
+        ret = list(checker.run())
+        self.assertEqual(
+            len(ret),
+            1,
+        )
 
     def test_no_old_formatter(self):
-        file_path = self._given_a_file_in_test_dir(
-            'b = 3\n'
-        )
-        app = application.Application()
-        with OutputCapture() as output:
-            app.run([file_path, ])
+        source = 'b = 3'
+        self.check_code(source)
 
-        self.assertEqual(
-            output.captured,
-            ''
-        )
+    def test_new_formatter(self):
+        source = 'print("hello {0:s}".format("world"))'
+        self.check_code(source)
 
-    def test_new_formatting_no_problem(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'print("hello {0:s}".format("world"))\n',
-        ]))
-        app = application.Application()
-        with OutputCapture() as output:
-            app.run([file_path, ])
+    def test_error(self):
+        source = 'print("hello %s" % ("world"))'
+        self.check_code(source, 'S001')
 
-        self.assertEqual(
-            output.captured,
-            ''
-        )
+    def test_line_number(self):
+        source = """
+        a = 2
+        open = 4
+        msg = "hello %s" % ("world")
+        """
+        tree = ast.parse(textwrap.dedent(source))
+        checker = Flake8Pep3101(tree, '/home/script.py')
+        ret = list(checker.run())
+        self.assertEqual(ret[0][0], 4)
+
+    def test_offset(self):
+        source = """
+        def bla():
+            msg = "hello %s" % ("world")
+        """
+        tree = ast.parse(textwrap.dedent(source))
+        checker = Flake8Pep3101(tree, '/home/script.py')
+        ret = list(checker.run())
+        self.assertEqual(ret[0][1], 10)
 
     def test_s_formatter(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'print("hello %s" % (\'lo\'))',
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
-        self.assertEqual(ret[0][0], 1)
-        self.assertEqual(ret[0][1], 6)
-        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
+        source = 'print("hello %s" % (\'lo\'))'
+        self.check_code(source, 'S001')
 
     def test_multiline_formatter(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'print("hello %s"',
-            '% (\'world\'))',
-        ]))
-        app = application.Application()
-        with OutputCapture() as output:
-            app.run([file_path, ])
-
-        self.assertIn(
-            '1:7: S001 found modulo formatter',
-            output.captured
+        source = """
+        print("hello %s"
+        % ('world')
         )
+        """
+        self.check_code(source, 'S001')
 
     def test_multiline_aligned_formatter(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'print("hello %s"',
-            '      % (\'world\'))',
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
-        self.assertEqual(ret[0][0], 1)
-        self.assertEqual(ret[0][1], 6)
-        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
+        source = """
+        print("hello %s"
+                     % ('world')
+        )
+        """
+        self.check_code(source, 'S001')
 
     def test_logging_module(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'import logging',
-            'logger = logging.getLogger()',
-            'logger.info("%s is bad", "me")'
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 0)
+        source = """
+        import logging
+        logger = logging.getLogger()
+        logger.info("%s world", "hello")
+        """
+        self.check_code(source)
 
     def test_multiple_strings(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            '"""""""1" if "%" else "2"'
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 0)
+        source = '"""""""1" if "%" else "2"'
+        self.check_code(source)
 
     def test_multiple_single_quotes_strings(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            "'''''''1' if '%' else '2'"
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 0)
+        source = "'''''''1' if '%' else '2'"
+        self.check_code(source)
 
     def test_multiple_strings_with_old_formatting(self):
         """Check that multiple quoting is handled properly.
 
         In this case correctly detecting it.
         """
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            '"""""""1" if "%" else "2%s" % "x"'
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
-        self.assertEqual(ret[0][0], 1)
-        self.assertEqual(ret[0][1], 22)
-        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
+        source = '"""""""1" if "%" else "2%s" % "x"'
+        self.check_code(source, 'S001')
 
     def test_percent_on_string(self):
         """Check that multiple quoting is handled properly.
@@ -130,74 +126,51 @@ class TestFlake8Pep3101(unittest.TestCase):
 
         Found in plone.app.drafts.tests
         """
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'a = \'"%2B%2Badd%2B%2BMyDocument"\''
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 0)
+
+        source = 'a = \'"%2B%2Badd%2B%2BMyDocument"\''
+        self.check_code(source)
 
     def test_percent_as_last_character_on_line(self):
         """Check that a percent symbol as the last character on a line is
         handled properly.
         """
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            "a = 'my string %s %s' \\",
-            "    %\\",
-            "    ('3', '4', )",
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
-        self.assertEqual(ret[0][0], 1)
-        self.assertEqual(ret[0][1], 4)
-        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
+        source = """
+        a = 'my string %s %s' \
+            % \
+            ('3', '4', )
+        """
+        self.check_code(source, 'S001')
 
     def test_variable(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            "a = 'my string %s %s'",
-            "a % ('3', '4', )",
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
-        self.assertEqual(ret[0][0], 2)
-        self.assertEqual(ret[0][1], 0)
-        self.assertEqual(ret[0][2], 'S001 found modulo formatter')
+        source = """
+        a = 'my string %s %s'
+        a % ('3', '4', )
+        """
+        self.check_code(source, 'S001')
 
     def test_right_hand_number_modulo(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'var = 40',
-            'if var % 50 == 0:',
-            '    print(var)',
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 0)
+        source = """
+        var = 40
+        if var % 50 == 0:
+            print(var)
+        """
+        self.check_code(source)
 
     def test_left_hand_number_modulo(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'var = 40',
-            'if 50 % var == 0:',
-            '    print(var)',
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 0)
+        source = """
+        var = 40
+        if 50 % var == 0:
+            print(var)
+        """
+        self.check_code(source)
 
     def test_right_hand_string_left_hand_number(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'print("asd %s" % 1)',
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
+        source = 'print("asd %s" % 1)'
+        self.check_code(source, 'S001')
 
     def test_right_hand_string_left_hand_variable(self):
-        file_path = self._given_a_file_in_test_dir('\n'.join([
-            'a = 44',
-            'print("asd %s" % a)',
-        ]))
-        checker = Flake8Pep3101(None, file_path)
-        ret = list(checker.run())
-        self.assertEqual(len(ret), 1)
+        source = """
+        a = 44
+        print("asd %s" % a)
+        """
+        self.check_code(source, 'S001')

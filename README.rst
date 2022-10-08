@@ -1,20 +1,23 @@
 .. -*- coding: utf-8 -*-
 
-.. image:: https://travis-ci.org/gforcada/flake8-pep3101.svg?branch=master
-   :target: https://travis-ci.org/gforcada/flake8-pep3101
+.. image:: https://github.com/gforcada/flake8-pep3101/actions/workflows/testing.yml/badge.svg?event=push
+   :target: https://github.com/gforcada/flake8-pep3101/actions/workflows/testing.yml
 
 .. image:: https://coveralls.io/repos/gforcada/flake8-pep3101/badge.svg?branch=master&service=github
    :target: https://coveralls.io/github/gforcada/flake8-pep3101?branch=master
 
 Flake8 PEP 3101 plugin
 ======================
-Python has two string formatting options,
-either the old percent operator or the new ``.format()`` string method.
+Python has three string formatting options:
 
-Being the new one more powerful, expressive and a drop-in replacement
-over the old one.
+- the old percent operator
+- the ``.format()`` string method
+- `f-strings`_ (only since python 3.6+)
 
-See `pyformat website`_ for lots of examples of old vs new formatting.
+Although f-strings are more ergonomic, there a certain scenarios where the
+``.format()`` method is still the only viable option.
+
+See `pyformat website`_ for examples of the percent operator vs the ``format()`` method.
 
 For a more format definition see the `PEP 3101`_.
 
@@ -28,7 +31,7 @@ Install with pip::
 
 Requirements
 ------------
-- Python 2.7, 3.5, 3.6
+- Python 3.7, 3.8, 3.9, 3.10 and pypy3
 - flake8
 
 Extras
@@ -42,5 +45,6 @@ GPL 2.0
 
 .. _`pyformat website`: https://pyformat.info
 .. _`PEP 3101`: https://www.python.org/dev/peps/pep-3101
+.. _`f-strings`: https://peps.python.org/pep-0498/
 .. _`flake8-string-format`: https://pypi.python.org/pypi/flake8-string-format
 .. _`plone.recipe.codeanalysis`: https://pypi.python.org/pypi/plone.recipe.codeanalysis
