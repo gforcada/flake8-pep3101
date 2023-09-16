@@ -9,6 +9,9 @@ Changelog
 - Drop python 3.7 support.
   [gforcada]
 
+- Test against python 3.12 pre-release.
+  [gforcada]
+
 2.0.0 (2022-10-08)
 ------------------
 
