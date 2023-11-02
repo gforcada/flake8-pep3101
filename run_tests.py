@@ -1,9 +1,9 @@
+from flake8_pep3101 import Flake8Pep3101
+from unittest import mock
+
 import ast
 import textwrap
 import unittest
-from unittest import mock
-
-from flake8_pep3101 import Flake8Pep3101
 
 
 class NewTestFlake8Pep3101(unittest.TestCase):

@@ -9,7 +9,19 @@ Changelog
 - Drop python 3.7 support.
   [gforcada]
 
-- Test against python 3.12 pre-release.
+- Test against python 3.12.
+  [gforcada]
+
+- Use `pyproject.toml` rather than `setup.py`.
+  [gforcada]
+
+- Switch from `setuptools` to `hatchling`.
+  [gforcada]
+
+- Switch to `main` branch.
+  [gforcada]
+
+- Use `tox` and `pre-commit` to ease project maintenance.
   [gforcada]
 
 2.0.0 (2022-10-08)
