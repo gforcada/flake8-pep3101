@@ -1,6 +1,6 @@
-import ast
-
 from flake8 import utils as stdin_utils
+
+import ast
 
 
 class Flake8Pep3101:
