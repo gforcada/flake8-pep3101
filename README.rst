@@ -1,10 +1,10 @@
 .. -*- coding: utf-8 -*-
 
-.. image:: https://github.com/gforcada/flake8-pep3101/actions/workflows/testing.yml/badge.svg?branch=master
+.. image:: https://github.com/gforcada/flake8-pep3101/actions/workflows/testing.yml/badge.svg?branch=main
    :target: https://github.com/gforcada/flake8-pep3101/actions/workflows/testing.yml
 
-.. image:: https://coveralls.io/repos/gforcada/flake8-pep3101/badge.svg?branch=master
-   :target: https://coveralls.io/github/gforcada/flake8-pep3101?branch=master
+.. image:: https://coveralls.io/repos/gforcada/flake8-pep3101/badge.svg?branch=main
+   :target: https://coveralls.io/github/gforcada/flake8-pep3101?branch=main
 
 Flake8 PEP 3101 plugin
 ======================
