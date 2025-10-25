@@ -26,7 +26,7 @@ class Flake8Pep3101:
                 if self._is_modulo_variable_and_number(stmt):
                     continue
 
-                if isinstance(stmt.left, (ast.Str, ast.Name)):
+                if isinstance(stmt.left, ast.Name) or self.is_text(stmt.left):
                     yield (
                         stmt.lineno,
                         stmt.col_offset,
@@ -38,12 +38,16 @@ class Flake8Pep3101:
     def _is_module_operation(stmt):
         return isinstance(stmt, ast.BinOp) and isinstance(stmt.op, ast.Mod)
 
-    @staticmethod
-    def _is_left_hand_number(stmt):
+    def _is_left_hand_number(self, stmt):
         """Check if it is a case of `44 % SOMETHING`."""
-        return isinstance(stmt.left, ast.Num)
+        return self.is_number(stmt.left)
 
-    @staticmethod
-    def _is_modulo_variable_and_number(stmt):
+    def _is_modulo_variable_and_number(self, stmt):
         """Check if it is a case of `var % 44`."""
-        return isinstance(stmt.right, ast.Num) and isinstance(stmt.left, ast.Name)
+        return self.is_number(stmt.right) and isinstance(stmt.left, ast.Name)
+
+    def is_number(self, stmt):
+        return isinstance(stmt, ast.Constant) and isinstance(stmt.value, int)
+
+    def is_text(self, stmt):
+        return isinstance(stmt, ast.Constant) and isinstance(stmt.value, str)
