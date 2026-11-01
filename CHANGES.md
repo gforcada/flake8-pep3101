@@ -2,7 +2,11 @@
 
 ## 3.0.1 (unreleased)
 
-- Nothing changed yet.
+- update supported python versions (3.11 to 3.15) @gforcada
+
+- improve CI speed by using `uvx` and `prek` @gforcada
+
+- tighten GHA with `zizmor` @gforcada
 
 ## 3.0.0 (2025-10-25)
 
